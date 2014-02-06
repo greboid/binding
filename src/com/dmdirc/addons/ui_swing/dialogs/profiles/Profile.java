@@ -54,7 +54,7 @@ public class Profile {
     private boolean deleted = false;
 
     public Profile() {
-        this("New Profile", new ArrayList<>(), "", "");
+        this("New Profile", new ArrayList<String>(), "", "");
     }
 
     public Profile(final String name, final List<String> nicknames, final String realname, final String ident) {
