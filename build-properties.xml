@@ -10,15 +10,7 @@
         <mkdir dir="nbproject/private"/>
     </target>
 
-    <target name="-create-private-classpath">
-        <echo append="true" file="nbproject/private/private.properties">${line.separator}javac.classpath=${line.separator}</echo>
-    </target>
-
-    <target name="-create-private-test-classpath">
-        <echo append="true" file="nbproject/private/private.properties">${line.separator}javac.test.classpath=${line.separator}</echo>
-    </target>
-
-    <target name="-init-private-properties" depends="-create-private-properties,-create-private-classpath,-create-private-test-classpath">
+    <target name="-init-private-properties" depends="-create-private-properties">
         <path id="main-libs">
             <fileset dir="lib/main" includes="*.jar"/>
         </path>
