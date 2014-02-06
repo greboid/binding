@@ -1,0 +1,19 @@
+<ivy-module version="2.0">
+    <info organisation="com.dmdirc" module="binding"/>
+
+    <configurations>
+        <conf name="build" description="Everything needed to support the build process"/>
+        <conf name="main" description="Everything needed to compile DMDirc separately"/>
+        <conf name="test" description="Everything needed to test DMDirc"/>
+        <conf name="analyse" description="Everything needed to run analysis on DMDirc"/>
+    </configurations>
+
+    <dependencies>
+        <dependency org="com.google.code.findbugs" name="jsr305" rev="2.+" conf="main->default" />
+        <dependency org="com.miglayout" name="miglayout-swing" rev="4.+" conf="main->default" />
+
+        <dependency org="junit" name="junit" rev="4.+" conf="test->default" />
+        <dependency org="org.mockito" name="mockito-all" rev="1.+" conf="test->default" />
+        <exclude org="ant" module="ant"/>
+    </dependencies>
+</ivy-module>

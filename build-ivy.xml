@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="DMDirc-ivy" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+    <description>Ivy utilities for DMDirc</description>
+
+    <property name="ivy.install.version" value="2.3.0" />
+    <property name="ivy.cache.ttl.default" value="7d"/>
+
+    <target name="-init-lib-directory">
+        <mkdir dir="lib/main/"/>
+        <mkdir dir="lib/test/"/>
+    </target>
+
+    <target name="-check-ivy-jar">
+        <pathconvert property="found" setonempty="false" pathsep=" ">
+            <path>
+                <fileset dir="." includes="ivy*.jar" />
+            </path>
+        </pathconvert>
+    </target>
+
+    <target name="-download-ivy" unless="-check-ivy-jar">
+        <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+             dest="." usetimestamp="true"/>
+    </target>
+
+    <target name="-init-ivy" depends="-download-ivy, -init-lib-directory">
+        <path id="ivy.classpath">
+            <fileset dir="." includes="ivy*.jar"/>
+        </path>
+
+        <available classname="org.apache.ivy.ant.IvyConfigure"
+                   property="ivy.available" classpathref="ivy.classpath" />
+    </target>
+
+    <target name="-init-dependencies" depends="-init-ivy" unless="ivy.done">
+        <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.classpath"/>
+        <ivy:settings file="ivysettings.xml"/>
+        <ivy:retrieve symlink="true" pattern="lib/[conf]/[artifact].[ext]" sync="true" />
+        <property name="ivy.done" value="true"/>
+    </target>
+</project>

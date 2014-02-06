@@ -1,2 +1,5 @@
-build/
-nbproject/private/
+/build/
+/nbproject/private/
+/dist/
+/lib/
+/ivy*.jar
