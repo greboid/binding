@@ -22,7 +22,10 @@
 
 package com.dmdirc.addons.ui_swing.dialogs.profiles;
 
+import com.dmdirc.util.collections.ObservableList;
+import com.dmdirc.util.collections.ObservableListDecorator;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +35,10 @@ import java.util.Objects;
  */
 public class Profile {
 
+    /**
+     * Property change support.
+     */
+    private final PropertyChangeSupport pcs;
     /**
      * Profile Name, must be a sanitised filename.
      */
@@ -47,17 +54,18 @@ public class Profile {
     /**
      * Nicknames.
      */
-    private List<String> nicknames;
+    private ObservableList<String> nicknames;
     /**
      * Has this profile been marked deleted?
      */
     private boolean deleted = false;
 
     public Profile() {
-        this("New Profile", new ArrayList<String>(), "", "");
+        this("New Profile", new ObservableListDecorator(new ArrayList<String>()), "", "");
     }
 
-    public Profile(final String name, final List<String> nicknames, final String realname, final String ident) {
+    public Profile(final String name, final ObservableList<String> nicknames, final String realname, final String ident) {
+        pcs = new PropertyChangeSupport(this);
         this.name = name;
         this.nicknames = nicknames;
         this.realname = realname;
@@ -70,6 +78,7 @@ public class Profile {
 
     public void setName(final String name) {
         this.name = name;
+        pcs.firePropertyChange("name", name, name);
     }
 
     public String getRealname() {
@@ -78,6 +87,7 @@ public class Profile {
 
     public void setRealname(final String realname) {
         this.realname = realname;
+        pcs.firePropertyChange("realname", realname, realname);
     }
 
     public String getIdent() {
@@ -86,14 +96,16 @@ public class Profile {
 
     public void setIdent(final String ident) {
         this.ident = ident;
+        pcs.firePropertyChange("ident", ident, ident);
     }
 
-    public List<String> getNicknames() {
+    public ObservableList<String> getNicknames() {
         return nicknames;
     }
 
-    public void setNicknames(final List<String> nicknames) {
+    public void setNicknames(final ObservableList<String> nicknames) {
         this.nicknames = nicknames;
+        pcs.firePropertyChange("nicknames", nicknames, nicknames);
     }
 
     public boolean isDeleted() {
@@ -102,55 +114,7 @@ public class Profile {
 
     public void setDeleted(final boolean deleted) {
         this.deleted = deleted;
-    }
-
-    /**
-     * Adds a nickname to this profile.
-     *
-     * @param nickname A new nickname for the profile
-     */
-    public void addNickname(final String nickname) {
-        if (!nicknames.contains(nickname)) {
-            nicknames.add(nickname);
-        }
-    }
-
-    /**
-     * Adds a nickname to this profile.
-     *
-     * @param nickname A new nickname for the profile
-     * @param position Position for the new alternate nickname
-     */
-    public void addNickname(final String nickname, final int position) {
-        if (!nicknames.contains(nickname)) {
-            nicknames.add(position, nickname);
-        }
-    }
-
-    /**
-     * Deletes a nickname from this profile.
-     *
-     * @param nickname An existing nickname from the profile
-     */
-    public void delNickname(final String nickname) {
-        nicknames.remove(nickname);
-    }
-
-    /**
-     * Edits a nickname in the list.
-     *
-     * @param nickname Nickname to edit
-     * @param newNickname Edited nickname
-     */
-    public void editNickname(final String nickname, final String newNickname) {
-        if (nickname.isEmpty() || newNickname.isEmpty()) {
-            return;
-        }
-        if (!nickname.equals(newNickname)) {
-            final int index = nicknames.indexOf(nickname);
-            nicknames.remove(nickname);
-            nicknames.add(index, newNickname);
-        }
+        pcs.firePropertyChange("deleted", deleted, deleted);
     }
 
     @Override
@@ -194,10 +158,10 @@ public class Profile {
     }
 
     public void addPropertyChangeListener(final String property, final PropertyChangeListener listener) {
-        //Do stuff
+        pcs.addPropertyChangeListener(property, listener);
     }
 
     public void removePropertyChangeListener(final String property, final PropertyChangeListener listener) {
-        //Do stuff
+        pcs.removePropertyChangeListener(listener);
     }
 }

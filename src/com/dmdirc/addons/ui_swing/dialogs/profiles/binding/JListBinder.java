@@ -26,17 +26,18 @@ import com.dmdirc.addons.ui_swing.components.GenericListModel;
 import com.dmdirc.util.collections.ListObserver;
 import com.dmdirc.util.collections.ListenerList;
 import com.dmdirc.util.collections.ObservableList;
-import com.dmdirc.util.collections.ObservableListDecorator;
 import java.beans.IntrospectionException;
 import java.util.List;
 import javax.swing.JList;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 /**
  * Binds a JList to a bean.
  */
-public class JListBinder<T> implements ListSelectionListener, ListObserver, Binder<List<T>> {
+public class JListBinder<T> implements ListSelectionListener, ListDataListener, ListObserver, Binder<ObservableList<T>> {
 
     private final ListenerList listeners;
     private final JList<T> list;
@@ -49,19 +50,19 @@ public class JListBinder<T> implements ListSelectionListener, ListObserver, Bind
         this.list = list;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void setObject(final List<T> object) {
-        if (object instanceof ObservableList) {
-            this.object = (ObservableList<T>) object;
-        } else {
-            this.object = new ObservableListDecorator<>(object);
+    public void setObject(final ObservableList<T> object) {
+        if (this.object != null) {
+            list.getModel().removeListDataListener(this);
+            list.getSelectionModel().removeListSelectionListener(this);
         }
+        this.object = (ObservableList<T>) object;
         model.clear();
         list.setModel(model);
         for (T item : this.object) {
             model.add(item);
         }
+        list.getModel().addListDataListener(this);
         list.getSelectionModel().addListSelectionListener(this);
     }
 
@@ -100,5 +101,28 @@ public class JListBinder<T> implements ListSelectionListener, ListObserver, Bind
 
     public JList<T> getList() {
         return list;
+    }
+
+    @Override
+    public void intervalAdded(ListDataEvent e) {
+        for (int i = e.getIndex0(); i < e.getIndex1(); i++) {
+            object.add(i, (T) model.getElementAt(i));
+        }
+    }
+
+    @Override
+    public void intervalRemoved(ListDataEvent e) {
+        for (int i = e.getIndex0(); i < e.getIndex1(); i++) {
+            object.remove(i);
+        }
+    }
+
+    @Override
+    public void contentsChanged(ListDataEvent e) {
+        model.clear();
+        list.setModel(model);
+        for (T item : this.object) {
+            model.add(item);
+        }
     }
 }

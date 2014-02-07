@@ -60,7 +60,6 @@ public class StandardDialog extends JDialog {
     /**
      * Creates a new instance of StandardDialog.
      *
-     * @param dialogManager Dialog Manager used for disposal
      * @param owner The frame that owns this dialog
      * @param modal Whether to display modally or not
      */
@@ -71,12 +70,10 @@ public class StandardDialog extends JDialog {
     /**
      * Creates a new instance of StandardDialog.
      *
-     * @param dialogManager Dialog Manager used for disposal
      * @param owner The frame that owns this dialog
      * @param modal Whether to display modally or not
      */
-    public StandardDialog(
-            final Window owner, final ModalityType modal) {
+    public StandardDialog(final Window owner, final ModalityType modal) {
         super(owner, modal);
         this.owner = owner;
 

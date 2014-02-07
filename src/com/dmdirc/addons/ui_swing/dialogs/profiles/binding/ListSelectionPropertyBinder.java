@@ -29,9 +29,6 @@ import java.util.logging.Logger;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-/**
- *
- */
 public class ListSelectionPropertyBinder<T> implements ListSelectionListener {
 
     private final JListBinder<T> listBinder;

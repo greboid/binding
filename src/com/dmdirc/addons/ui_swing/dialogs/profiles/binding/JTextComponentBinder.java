@@ -28,15 +28,13 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
 /**
- * Binds a JList to a bean.
+ * Binds a JTextComponent to a bean.
  */
 public class JTextComponentBinder<O> implements DocumentListener, PropertyChangeListener, Binder<O> {
 
@@ -54,6 +52,7 @@ public class JTextComponentBinder<O> implements DocumentListener, PropertyChange
         this.property = property;
     }
 
+    @Override
     public void setObject(final O object) throws IntrospectionException, ReflectiveOperationException {
         if (this.object != null) {
             remove.invoke(object, property, this);
@@ -98,7 +97,7 @@ public class JTextComponentBinder<O> implements DocumentListener, PropertyChange
             value = (String) read.invoke(object);
             text.setText(value);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(JTextComponentBinder.class.getName()).log(Level.SEVERE, null, ex);
+            throw new IllegalStateException("Unable to update bound text: " + ex);
         }
     }
 
@@ -109,9 +108,9 @@ public class JTextComponentBinder<O> implements DocumentListener, PropertyChange
 
     private void updateText(DocumentEvent e) {
         try {
-            e.getDocument().getText(0, e.getDocument().getLength());
-        } catch (BadLocationException ex) {
-            Logger.getLogger(JTextComponentBinder.class.getName()).log(Level.SEVERE, null, ex);
+            write.invoke(object, e.getDocument().getText(0, e.getDocument().getLength()));
+        } catch (BadLocationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            throw new IllegalStateException("Unable to update bound text: " + ex);
         }
     }
 }

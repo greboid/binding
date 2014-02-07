@@ -11,6 +11,9 @@
     </target>
 
     <target name="-init-private-properties" depends="-create-private-properties">
+        <path id="analyse-classpath">
+            <fileset dir="lib/analyse" includes="*.jar"/>
+        </path>
         <path id="main-libs">
             <fileset dir="lib/main" includes="*.jar"/>
         </path>

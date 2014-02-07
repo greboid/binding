@@ -4,5 +4,7 @@
     <import file="nbproject/build-impl.xml"/>
     <import file="build-ivy.xml"/>
     <import file="build-properties.xml"/>
+    <import file="build-bundling.xml"/>
     <target name="-pre-init" depends="-init-dependencies, -init-private-properties" />
+    <target name="-post-jar" depends="-bundle-libraries" />
 </project>

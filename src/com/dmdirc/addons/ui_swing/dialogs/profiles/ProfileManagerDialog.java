@@ -29,6 +29,7 @@ import com.dmdirc.addons.ui_swing.dialogs.profiles.binding.ConvertingBinder;
 import com.dmdirc.addons.ui_swing.dialogs.profiles.binding.JListBinder;
 import com.dmdirc.addons.ui_swing.dialogs.profiles.binding.JTextComponentBinder;
 import com.dmdirc.addons.ui_swing.dialogs.profiles.binding.ListSelectionPropertyBinder;
+import com.dmdirc.util.collections.ObservableList;
 import com.dmdirc.util.collections.ObservableListDecorator;
 import java.beans.IntrospectionException;
 import java.util.ArrayList;
@@ -84,13 +85,16 @@ public class ProfileManagerDialog extends StandardDialog {
         setCancelButton(new JButton());
         final List<Profile> profileList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            profileList.add(new Profile("Profile: " + i, Arrays.asList("nickname 1-" + i, "nickname 2-" + i), "realname " + i, "ident " + i));
+            final ObservableList<String> nicknameList = new ObservableListDecorator(new ArrayList<>());
+            nicknameList.add("nickname 1-" + i);
+            nicknameList.add("nickname 2-" + i);
+            profileList.add(new Profile("Profile: " + i, nicknameList, "realname " + i, "ident " + i));
         }
         try {
             final JListBinder<Profile> listBinder = new JListBinder<>(profiles);
             listBinder.setObject(new ObservableListDecorator<>(new ArrayList<>(profileList)));
             final JListBinder<String> nicknamesBinder = new JListBinder<>(nicknames);
-            final ConvertingBinder<Profile, List<String>> profileNicknameConverter = new ConvertingBinder<>(nicknamesBinder, "nicknames");
+            final ConvertingBinder<Profile, ObservableList<String>> profileNicknameConverter = new ConvertingBinder<>(nicknamesBinder, "nicknames");
             final JTextComponentBinder<Profile> nameBinder = new JTextComponentBinder<>(name, "name");
             final JTextComponentBinder<Profile> realnameBinder = new JTextComponentBinder<>(realname, "realname");
             final JTextComponentBinder<Profile> identBinder = new JTextComponentBinder<>(ident, "ident");
