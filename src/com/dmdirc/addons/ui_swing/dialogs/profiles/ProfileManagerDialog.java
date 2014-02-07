@@ -85,7 +85,7 @@ public class ProfileManagerDialog extends StandardDialog {
         setCancelButton(new JButton());
         final List<Profile> profileList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            final ObservableList<String> nicknameList = new ObservableListDecorator(new ArrayList<>());
+            final ObservableList<String> nicknameList = new ObservableListDecorator<>(new ArrayList<String>());
             nicknameList.add("nickname 1-" + i);
             nicknameList.add("nickname 2-" + i);
             profileList.add(new Profile("Profile: " + i, nicknameList, "realname " + i, "ident " + i));

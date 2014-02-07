@@ -50,6 +50,7 @@ public class JListBinder<T> implements ListSelectionListener, ListDataListener, 
         this.list = list;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void setObject(final ObservableList<T> object) {
         if (this.object != null) {
@@ -106,7 +107,9 @@ public class JListBinder<T> implements ListSelectionListener, ListDataListener, 
     @Override
     public void intervalAdded(ListDataEvent e) {
         for (int i = e.getIndex0(); i < e.getIndex1(); i++) {
-            object.add(i, (T) model.getElementAt(i));
+            @SuppressWarnings("unchecked")
+            final T value = (T) model.getElementAt(i);
+            object.add(i, value);
         }
     }
 
@@ -117,6 +120,7 @@ public class JListBinder<T> implements ListSelectionListener, ListDataListener, 
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void contentsChanged(ListDataEvent e) {
         model.clear();

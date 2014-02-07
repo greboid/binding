@@ -61,7 +61,7 @@ public class Profile {
     private boolean deleted = false;
 
     public Profile() {
-        this("New Profile", new ObservableListDecorator(new ArrayList<String>()), "", "");
+        this("New Profile", new ObservableListDecorator<>(new ArrayList<String>()), "", "");
     }
 
     public Profile(final String name, final ObservableList<String> nicknames, final String realname, final String ident) {
