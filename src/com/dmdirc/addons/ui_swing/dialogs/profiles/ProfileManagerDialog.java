@@ -25,6 +25,7 @@ package com.dmdirc.addons.ui_swing.dialogs.profiles;
 import com.dmdirc.addons.ui_swing.components.renderers.PropertyListCellRenderer;
 import com.dmdirc.addons.ui_swing.components.text.TextLabel;
 import com.dmdirc.addons.ui_swing.dialogs.StandardDialog;
+import com.dmdirc.addons.ui_swing.dialogs.profiles.binding.AbstractButtonBinder;
 import com.dmdirc.addons.ui_swing.dialogs.profiles.binding.ConvertingBinder;
 import com.dmdirc.addons.ui_swing.dialogs.profiles.binding.JListBinder;
 import com.dmdirc.addons.ui_swing.dialogs.profiles.binding.JTextComponentBinder;
@@ -100,6 +101,8 @@ public class ProfileManagerDialog extends StandardDialog {
             final JTextComponentBinder<Profile> identBinder = new JTextComponentBinder<>(ident, "ident");
             final ListSelectionPropertyBinder<Profile> listSelection = new ListSelectionPropertyBinder<>(listBinder, Arrays.asList(nameBinder, realnameBinder, identBinder, profileNicknameConverter));
             listSelection.bind();
+            final AbstractButtonBinder<ProfileManagerDialog> buttonBinder = new AbstractButtonBinder<>(addProfile, getClass(), "doStuff");
+            buttonBinder.setObject(this);
         } catch (ReflectiveOperationException | IntrospectionException ex) {
             throw new RuntimeException("Unable to create dialog.", ex);
         }
@@ -129,5 +132,9 @@ public class ProfileManagerDialog extends StandardDialog {
         add(ident, "growx, pushx, sgx textinput");
         add(getLeftButton(), "flowx, split 2, right, sg button");
         add(getRightButton(), "right, sg button");
+    }
+    
+    public void doStuff() {
+        System.out.println("Stuff.");
     }
 }
