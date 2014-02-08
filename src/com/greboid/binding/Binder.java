@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2014 DMDirc Developers
+ * Copyright (c) 2006-2014 Greg 'Greboid' Holmes
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,14 @@
  * SOFTWARE.
  */
 
-package com.dmdirc.util.validators;
+package com.greboid.binding;
+
+import java.beans.IntrospectionException;
 
 /**
- * Marks a component as validatable.
+ *
  */
-public interface Validatable {
+public interface Binder<O> {
 
-    /**
-     * Sets the validation response for a component.
-     *
-     * @param validation Validation response to show
-     */
-    void setValidation(ValidationResponse validation);
-
+    public void setObject(final O object) throws IntrospectionException, ReflectiveOperationException;
 }

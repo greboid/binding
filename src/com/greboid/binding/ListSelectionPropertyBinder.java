@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2014 DMDirc Developers
+ * Copyright (c) 2006-2014 Greg 'Greboid' Holmes
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,32 +20,39 @@
  * SOFTWARE.
  */
 
-package com.dmdirc.addons.ui_swing.dialogs.profiles.binding;
+package com.greboid.binding;
 
 import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-/**
- *
- */
-public class ConvertingBinder<T, O> implements Binder<T> {
+public class ListSelectionPropertyBinder<T> implements ListSelectionListener {
 
-    private final Binder<O> to;
-    private final String property;
+    private final JListBinder<T> listBinder;
+    private final Collection<Binder<T>> propertyBinders;
 
-    public ConvertingBinder(final Binder<O> to, final String property) {
-        this.to = to;
-        this.property = property;
+    public ListSelectionPropertyBinder(final JListBinder<T> listBinder,
+            final Collection<Binder<T>> propertyBinders) {
+        this.listBinder = listBinder;
+        this.propertyBinders = propertyBinders;
+    }
+
+    public void bind() {
+        listBinder.addListener(this);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void setObject(T object) throws IntrospectionException, ReflectiveOperationException {
-        final PropertyDescriptor propertyDescriptor
-                = new PropertyDescriptor(property, object.getClass());
-        final Method read = propertyDescriptor.getReadMethod();
-        to.setObject((O) read.invoke(object));
+    public void valueChanged(final ListSelectionEvent e) {
+        for (Binder<T> binder : propertyBinders) {
+            try {
+                binder.setObject(listBinder.getList().getSelectedValue());
+            } catch (IntrospectionException | ReflectiveOperationException ex) {
+                Logger.getLogger(ListSelectionPropertyBinder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
 }

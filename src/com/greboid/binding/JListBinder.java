@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2014 DMDirc Developers
+ * Copyright (c) 2006-2014 Greg 'Greboid' Holmes
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,15 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.greboid.binding;
 
-package com.dmdirc.addons.ui_swing.dialogs.profiles.binding;
-
-import com.dmdirc.addons.ui_swing.components.GenericListModel;
 import com.dmdirc.util.collections.ListObserver;
 import com.dmdirc.util.collections.ListenerList;
 import com.dmdirc.util.collections.ObservableList;
 import java.beans.IntrospectionException;
 import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
@@ -36,17 +35,19 @@ import javax.swing.event.ListSelectionListener;
 
 /**
  * Binds a JList to a bean.
+ *
+ * @param <T> Type contained in binder
  */
 public class JListBinder<T> implements ListSelectionListener, ListDataListener, ListObserver, Binder<ObservableList<T>> {
 
     private final ListenerList listeners;
     private final JList<T> list;
-    private final GenericListModel<T> model;
+    private final DefaultListModel<T> model;
     private ObservableList<T> object;
 
     public JListBinder(final JList<T> list) throws IntrospectionException {
         this.listeners = new ListenerList();
-        this.model = new GenericListModel<>();
+        this.model = new DefaultListModel<>();
         this.list = list;
     }
 
@@ -61,7 +62,7 @@ public class JListBinder<T> implements ListSelectionListener, ListDataListener, 
         model.clear();
         list.setModel(model);
         for (T item : this.object) {
-            model.add(item);
+            model.addElement(item);
         }
         list.getModel().addListDataListener(this);
         list.getSelectionModel().addListSelectionListener(this);
@@ -126,7 +127,7 @@ public class JListBinder<T> implements ListSelectionListener, ListDataListener, 
         model.clear();
         list.setModel(model);
         for (T item : this.object) {
-            model.add(item);
+            model.addElement(item);
         }
     }
 }

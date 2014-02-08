@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2014 DMDirc Developers
+ * Copyright (c) 2006-2014 Greg 'Greboid' Holmes
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.dmdirc.addons.ui_swing.dialogs.profiles.binding;
+package com.greboid.binding;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyChangeEvent;

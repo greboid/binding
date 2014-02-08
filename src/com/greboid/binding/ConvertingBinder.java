@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2014 DMDirc Developers
+ * Copyright (c) 2006-2014 Greg 'Greboid' Holmes
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,34 +20,32 @@
  * SOFTWARE.
  */
 
-package com.dmdirc.util.collections;
+package com.greboid.binding;
 
-import java.util.List;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 
 /**
- * Wraps a Map&lt;S, List&lt;T&gt;&gt; with various convenience methods for
- * accessing the data. Implements a Map-like interface for easier transition.
- * This implementation uses WeakLists (i.e., lists of weak references) - all
- * references to values are wrapped in WeakReferences.
  *
- * @param <S> the type of keys maintained by this map
- * @param <T> the type of mapped values
  */
-public class WeakMapList<S,T> extends MapList<S, T> {
+public class ConvertingBinder<T, O> implements Binder<T> {
 
-    /**
-     * Retrieves the list of values associated with the specified key, creating
-     * the key if neccessary.
-     *
-     * @param key The key to retrieve
-     * @return A list of the specified key's values
-     */
-    @Override
-    public List<T> safeGet(final S key) {
-        if (!map.containsKey(key)) {
-            map.put(key, new WeakList<T>());
-        }
+    private final Binder<O> to;
+    private final String property;
 
-        return map.get(key);
+    public ConvertingBinder(final Binder<O> to, final String property) {
+        this.to = to;
+        this.property = property;
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void setObject(T object) throws IntrospectionException, ReflectiveOperationException {
+        final PropertyDescriptor propertyDescriptor
+                = new PropertyDescriptor(property, object.getClass());
+        final Method read = propertyDescriptor.getReadMethod();
+        to.setObject((O) read.invoke(object));
+    }
+
 }
