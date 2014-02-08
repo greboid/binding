@@ -8,5 +8,9 @@
             <artifact
                 pattern="http://repo1.maven.org/maven2/[organization]/[module]/[revision]/[artifact]-[revision].[ext]" />
         </url>
+        <ibiblio name="dmdirc-releases" root="http://nexus.dmdirc.com/nexus/content/groups/public/" m2compatible="true"/>
     </resolvers>
+    <modules>
+        <module organisation="com.dmdirc" name="*" resolver="dmdirc-releases"/>
+    </modules>
 </ivysettings>

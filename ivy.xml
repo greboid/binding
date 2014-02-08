@@ -9,6 +9,7 @@
     </configurations>
 
     <dependencies>
+        <dependency org="com.dmdirc" name="utils" rev="Nightly-20120606_0.6.5-41-g093f9e6" conf="main->default" />
         <dependency org="com.google.code.findbugs" name="jsr305" rev="2.+" conf="main->default" />
         <dependency org="com.miglayout" name="miglayout-swing" rev="4.+" conf="main->default" />
 
@@ -16,7 +17,7 @@
         <dependency org="org.mockito" name="mockito-all" rev="1.+" conf="test->default" />
 
         <dependency org="net.sf.proguard" name="proguard-anttask" rev="4.+" conf="analyse->default" />
-        
+
         <exclude org="ant" module="ant"/>
     </dependencies>
 </ivy-module>
