@@ -30,10 +30,12 @@ import java.lang.reflect.Method;
 import javax.swing.AbstractButton;
 
 public class AbstractButtonBinder<T> implements ActionListener, Binder<T> {
+
     private final Method actionMethod;
     private T object;
-    
-    public AbstractButtonBinder(final AbstractButton button, final Class<? extends T> type, final String methodName) {
+
+    public AbstractButtonBinder(final AbstractButton button,
+            final Class<? extends T> type, final String methodName) {
         try {
             actionMethod = type.getMethod(methodName);
         } catch (NoSuchMethodException | SecurityException ex) {
@@ -43,17 +45,21 @@ public class AbstractButtonBinder<T> implements ActionListener, Binder<T> {
     }
 
     @Override
-    public void setObject(final T object) throws IntrospectionException, ReflectiveOperationException {
+    public void setObject(final T object)
+            throws IntrospectionException, ReflectiveOperationException {
         this.object = object;
     }
 
     @Override
     public void actionPerformed(final ActionEvent e) {
+        if (object == null) {
+            return;
+        }
         try {
             actionMethod.invoke(object);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             throw new IllegalStateException("Unable to execute method", ex);
         }
     }
-    
+
 }

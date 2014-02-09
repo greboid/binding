@@ -22,27 +22,12 @@
 
 package com.greboid.binding;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
+import org.junit.Test;
 
-public class ConvertingBinder<T, O> implements Binder<T> {
+public class ConvertingBinderTest {
 
-    private final Binder<O> to;
-    private final String property;
-
-    public ConvertingBinder(final Binder<O> to, final String property) {
-        this.to = to;
-        this.property = property;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void setObject(T object) throws IntrospectionException, ReflectiveOperationException {
-        final PropertyDescriptor propertyDescriptor
-                = new PropertyDescriptor(property, object.getClass());
-        final Method read = propertyDescriptor.getReadMethod();
-        to.setObject((O) read.invoke(object));
+    @Test
+    public void testSetObject() throws Exception {
     }
 
 }

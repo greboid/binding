@@ -22,27 +22,32 @@
 
 package com.greboid.binding;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
+import javax.swing.JButton;
+import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-public class ConvertingBinder<T, O> implements Binder<T> {
+public class AbstractButtonBinderTest {
 
-    private final Binder<O> to;
-    private final String property;
-
-    public ConvertingBinder(final Binder<O> to, final String property) {
-        this.to = to;
-        this.property = property;
+    @Test
+    public void testDoClick() throws Exception {
+        final TestBean test = mock(TestBean.class);
+        final JButton button = new JButton();
+        final AbstractButtonBinder<TestBean> binder
+                = new AbstractButtonBinder<>(button, test.getClass(), "doTest");
+        binder.setObject(test);
+        verify(test, times(0)).doTest();
+        button.doClick();
+        verify(test).doTest();
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void setObject(T object) throws IntrospectionException, ReflectiveOperationException {
-        final PropertyDescriptor propertyDescriptor
-                = new PropertyDescriptor(property, object.getClass());
-        final Method read = propertyDescriptor.getReadMethod();
-        to.setObject((O) read.invoke(object));
+    @Test(expected = IllegalArgumentException.class)
+    public void testWrongMethod() throws Exception {
+        final TestBean test = mock(TestBean.class);
+        final JButton button = new JButton();
+        final AbstractButtonBinder<TestBean> binder
+                = new AbstractButtonBinder<>(button, test.getClass(), "test");
     }
 
 }

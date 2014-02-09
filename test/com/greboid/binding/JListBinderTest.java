@@ -22,27 +22,75 @@
 
 package com.greboid.binding;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class ConvertingBinder<T, O> implements Binder<T> {
+public class JListBinderTest {
 
-    private final Binder<O> to;
-    private final String property;
-
-    public ConvertingBinder(final Binder<O> to, final String property) {
-        this.to = to;
-        this.property = property;
+    public JListBinderTest() {
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void setObject(T object) throws IntrospectionException, ReflectiveOperationException {
-        final PropertyDescriptor propertyDescriptor
-                = new PropertyDescriptor(property, object.getClass());
-        final Method read = propertyDescriptor.getReadMethod();
-        to.setObject((O) read.invoke(object));
+    @BeforeClass
+    public static void setUpClass() {
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+    }
+
+    @Before
+    public void setUp() {
+    }
+
+    @After
+    public void tearDown() {
+    }
+
+    @Test
+    public void testSetObject() {
+    }
+
+    @Test
+    public void testOnItemsAdded() {
+    }
+
+    @Test
+    public void testOnItemsChanged() {
+    }
+
+    @Test
+    public void testOnItemsRemoved() {
+    }
+
+    @Test
+    public void testValueChanged() {
+    }
+
+    @Test
+    public void testAddListener() {
+    }
+
+    @Test
+    public void testRemoveListener() {
+    }
+
+    @Test
+    public void testGetList() {
+    }
+
+    @Test
+    public void testIntervalAdded() {
+    }
+
+    @Test
+    public void testIntervalRemoved() {
+    }
+
+    @Test
+    public void testContentsChanged() {
     }
 
 }

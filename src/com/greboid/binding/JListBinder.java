@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package com.greboid.binding;
 
 import com.dmdirc.util.collections.ListObserver;
@@ -51,7 +52,6 @@ public class JListBinder<T> implements ListSelectionListener, ListDataListener, 
         this.list = list;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void setObject(final ObservableList<T> object) {
         if (this.object != null) {
